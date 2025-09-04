@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#0b120b" />
+		<title>Andres Felipe Martinez Taborda — 22</title>
+		<meta name="description" content="Portafolio hacker/Matrix de Andres Felipe Martinez Taborda. Número 22 por todas partes. Estilo consola, moderno y responsivo." />
+		<style>
+			:root {
+				--bg: #0b120b;
+				--bg-elev: #0f160f;
+				--fg: #e7ffe7;
+				--neon: #22ff22; /* 22 verde */
+				--neon-soft: #16d916;
+				--neon-dim: #0c7f0c;
+				--glass: rgba(13, 22, 13, 0.6);
+				--card: rgba(14, 24, 14, 0.8);
+				--muted: #b4fbb4;
+				--shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+				--radius: 16px;
+			}
+
+			* { box-sizing: border-box; }
+			html, body { height: 100%; }
+			body {
+				margin: 0;
+				font-family: Consolas, "SFMono-Regular", "Source Code Pro", Menlo, Monaco, "Courier New", monospace;
+				color: var(--fg);
+				background: radial-gradient(1200px 800px at 10% 10%, #0f190f 0%, var(--bg) 50%) fixed;
+				background-color: var(--bg);
+				line-height: 1.55;
+				overflow-x: hidden;
+			}
+
+			a { color: var(--neon); text-decoration: none; }
+			.container { width: min(1200px, 92vw); margin: 0 auto; }
+
+			/* Subtle scanline + noise overlay */
+			.noise {
+				pointer-events: none;
+				position: fixed; inset: 0;
+				background-image: repeating-linear-gradient(to bottom, rgba(255,255,255,0.02) 0, rgba(255,255,255,0.02) 1px, transparent 2px),
+													radial-gradient(ellipse at center, rgba(34,255,34,0.03), transparent 60%);
+				background-size: auto, 100% 100%;
+				mix-blend-mode: overlay;
+				z-index: 2;
+				opacity: 0.8;
+				animation: scan 8s linear infinite;
+			}
+			@keyframes scan {
+				0% { transform: translateY(-2%); }
+				50% { transform: translateY(2%); }
+				100% { transform: translateY(-2%); }
+			}
+
+			/* HERO */
+			.hero {
+				position: relative;
+				min-height: 100svh;
+				display: grid;
+				grid-template-rows: 1fr auto;
+				place-items: stretch;
+				isolation: isolate;
+				overflow: hidden;
+			}
+			#matrix {
+				position: absolute; inset: 0;
+				width: 100%; height: 100%;
+				z-index: 0;
+				opacity: 0.65;
+				filter: drop-shadow(0 0 6px rgba(34,255,34,0.35));
+			}
+			.hero-image {
+				position: absolute; inset: 0;
+				z-index: -1;
+				background: radial-gradient(1200px 800px at 80% 30%, rgba(34,255,34,0.14), transparent 60%),
+										linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.7)),
+										var(--hero-image, url('')) center/cover no-repeat;
+				filter: saturate(0.9) contrast(1.05) brightness(0.9);
+				transition: filter 400ms ease, transform 600ms ease;
+			}
+			.hero-image.has-image { filter: saturate(1.1) contrast(1.1) brightness(0.9); }
+			.hero-image:hover { transform: scale(1.01); }
+
+			.hero-controls {
+				position: absolute; right: 1rem; bottom: 1rem; z-index: 3;
+				display: flex; gap: .75rem; flex-wrap: wrap; align-items: center;
+			}
+			.btn {
+				--glow: 0 0 12px rgba(34,255,34,0.45), inset 0 0 8px rgba(34,255,34,0.25);
+				padding: .7rem 1.1rem; border-radius: 12px; border: 1px solid var(--neon-dim);
+				color: var(--fg); background: linear-gradient(180deg, rgba(20,35,20,0.9), rgba(8,14,8,0.9));
+				box-shadow: var(--glow);
+				backdrop-filter: blur(6px);
+				cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+			}
+			.btn:hover { transform: translateY(-2px); border-color: var(--neon); box-shadow: 0 0 22px rgba(34,255,34,0.6), inset 0 0 12px rgba(34,255,34,0.35); }
+			.btn.ghost { background: transparent; color: var(--neon); }
+			.btn.primary { color: #031003; background: linear-gradient(180deg, #b0ffb0, #22ff22); border-color: #9dff9d; }
+			.btn.primary:hover { box-shadow: 0 0 28px rgba(34,255,34,0.75); }
+			.btn.small { padding: .5rem .8rem; border-radius: 10px; font-size: .9rem; }
+
+			.hero-content {
+				position: relative;
+				z-index: 1;
+				display: grid; gap: 1rem; align-content: center; justify-items: center;
+				padding: clamp(1rem, 3vw, 2rem);
+				text-align: center;
+			}
+			h1.glitch {
+				margin: 0;
+				font-size: clamp(2rem, 5vw + 1rem, 5rem);
+				line-height: 1.05;
+				text-transform: uppercase;
+				letter-spacing: .06em;
+				position: relative;
+				color: var(--fg);
+				filter: drop-shadow(0 0 10px rgba(34,255,34,0.25));
+			}
+			h1.glitch::before, h1.glitch::after {
+				content: attr(data-text);
+				position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+			}
+			h1.glitch::before { color: #22ff22; transform: translate(1px, 0); clip-path: polygon(0 2%, 100% 2%, 100% 38%, 0 38%); animation: glitchTop 3.2s infinite linear; }
+			h1.glitch::after  { color: #22a122; transform: translate(-1px, 0); clip-path: polygon(0 60%, 100% 60%, 100% 98%, 0 98%); animation: glitchBot 2.9s infinite linear; }
+			@keyframes glitchTop {
+				0% { transform: translate(1px, 0); } 20% { transform: translate(1px, 0); }
+				21% { transform: translate(3px, -1px); } 22% { transform: translate(-2px, 1px); }
+				23% { transform: translate(1px, -1px); } 100% { transform: translate(1px, 0); }
+			}
+			@keyframes glitchBot {
+				0% { transform: translate(-1px, 0); } 19% { transform: translate(-1px, 0); }
+				20% { transform: translate(-3px, 1px); } 21% { transform: translate(2px, -1px); }
+				22% { transform: translate(-1px, 2px); } 100% { transform: translate(-1px, 0); }
+			}
+
+			.subtitle {
+				color: var(--muted);
+				font-size: clamp(1rem, 1.4vw + .6rem, 1.4rem);
+				opacity: 0.92;
+			}
+			.badge-row { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; }
+			.badge { border: 1px dashed var(--neon-dim); color: var(--neon); padding: .35rem .6rem; border-radius: 999px; background: rgba(34,255,34,0.06); }
+
+			.cta { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: .5rem; }
+
+			/* Marquee: nombre muchas veces + 22 */
+			.marquee {
+				width: 100%; overflow: hidden; border-block: 1px solid rgba(34,255,34,0.15);
+				background: linear-gradient(180deg, rgba(10,16,10,0.85), rgba(7,11,7,0.85));
+			}
+			.marquee-track {
+				display: flex; gap: 2.2rem; padding: .9rem 0; align-items: center;
+				animation: slide 22s linear infinite;
+				will-change: transform;
+			}
+			.marquee:hover .marquee-track { animation-play-state: paused; }
+			@keyframes slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+			.tag { white-space: nowrap; color: var(--neon); opacity: .9; text-shadow: 0 0 8px rgba(34,255,34,0.45); }
+
+			/* Terminal cards */
+			section { padding: clamp(2rem, 5vw, 4rem) 0; }
+			.terminal-card {
+				background: var(--card);
+				border: 1px solid rgba(34,255,34,0.22);
+				border-radius: var(--radius);
+				box-shadow: var(--shadow);
+				padding: 1.2rem;
+				position: relative;
+				overflow: hidden;
+			}
+			.terminal-card::before {
+				content: "◢◤ ANDRES-22";
+				position: absolute; top: 0; left: 0; right: 0;
+				padding: .4rem .8rem; font-size: .85rem; letter-spacing: .1em;
+				background: linear-gradient(90deg, rgba(34,255,34,0.15), transparent);
+				color: var(--neon);
+				border-bottom: 1px solid rgba(34,255,34,0.15);
+			}
+			.code { color: #a7f5a7; }
+			.dim { color: #86d786; }
+			.ok { color: #22ff22; }
+			.warn { color: #ffee99; }
+
+			/* Grid 22 cajas */
+			.grid22 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
+			.tile22 {
+				aspect-ratio: 1.6/1; border: 1px solid rgba(34,255,34,0.25); border-radius: 12px; position: relative; overflow: hidden;
+				background: linear-gradient(180deg, rgba(15,25,15,0.9), rgba(7,12,7,0.9));
+				display: grid; place-items: center;
+				color: var(--neon);
+				text-shadow: 0 0 10px rgba(34,255,34,0.5);
+				transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+			}
+			.tile22:hover { transform: translateY(-4px); border-color: var(--neon); box-shadow: 0 12px 30px rgba(34,255,34,0.15); }
+			.tile22 .big { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; }
+			.tile22 .mini { font-size: .85rem; opacity: .8; }
+
+			/* Reveal on scroll */
+			.reveal { opacity: 0; transform: translateY(18px) scale(.98); transition: opacity .6s ease, transform .6s ease; }
+			.reveal.visible { opacity: 1; transform: none; }
+
+			footer { border-top: 1px solid rgba(34,255,34,0.15); padding: 2rem 0; color: var(--muted); font-size: .95rem; }
+			.copy { opacity: .8; }
+
+			/* Responsive tweaks */
+			@media (max-width: 720px) {
+				.hero-controls { right: .6rem; bottom: .6rem; }
+				.btn { padding: .6rem .9rem; }
+			}
+		</style>
+	</head>
+	<body>
+		<div class="noise" aria-hidden="true"></div>
+
+		<header class="hero" id="top">
+			<canvas id="matrix" aria-hidden="true"></canvas>
+			<div class="hero-image" id="heroImage" role="img" aria-label="Foto de Andres Felipe Martinez Taborda" title="Haz clic para establecer la foto de ANDRES (22)"></div>
+			<div class="hero-content container">
+				<h1 class="glitch" data-text="ANDRES FELIPE MARTINEZ TABORDA">ANDRES FELIPE MARTINEZ TABORDA</h1>
+				<p class="subtitle" id="typewrite" data-text='Ingeniero en Sistemas ▮ Hacker vibe ▮ 22/22 disponibilidad ▮ Código verde'>Ingeniero en Sistemas ▮ Hacker vibe ▮ 22/22 disponibilidad ▮ Código verde</p>
+				<div class="badge-row" aria-hidden="true">
+					<span class="badge">#22</span>
+					<span class="badge">0x16</span>
+					<span class="badge">10110</span>
+					<span class="badge">00010110</span>
+					<span class="badge">v22.22</span>
+					<span class="badge">UPTIME: 22</span>
+				</div>
+				<div class="cta">
+					<a href="#about" class="btn primary">Entrar // 22</a>
+					<button class="btn ghost" id="btnSetPhoto" type="button">Cargar foto</button>
+				</div>
+			</div>
+			<div class="hero-controls">
+				<button class="btn small" id="btnPauseMatrix" type="button">Pausar Matrix</button>
+				<button class="btn small" id="btnTheme" type="button">Contraste 22</button>
+			</div>
+			<input type="file" id="photoInput" accept="image/*" hidden />
+		</header>
+
+		<section class="marquee" aria-label="Nombre de Andres repetido 22 veces">
+			<div class="marquee-track">
+				<div class="container" style="display:flex; gap:2.2rem; flex-wrap:nowrap;">
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+				</div>
+				<div class="container" style="display:flex; gap:2.2rem; flex-wrap:nowrap;" aria-hidden="true">
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+					<span class="tag">ANDRES FELIPE MARTINEZ TABORDA · 22</span>
+				</div>
+			</div>
+		</section>
+
+		<main class="container">
+			<section id="about" class="terminal-card reveal">
+				<pre class="code" aria-label="Terminal de Andres 22">
+$ whoami
+	andres_felipe_martinez_taborda@22
+$ uname -a
+	Ingeniero_en_Sistemas x86_64 22-Núcleos #22 SMP PREEMPT
+$ skills --top 22
+	[22] Arquitectura de software    [22] Seguridad y cifrado
+	[22] DevOps y automatización     [22] Full‑Stack JS / Python
+$ motto
+	"Compila sueños, despliega realidades." — ANDRES 22
+				</pre>
+			</section>
+
+			<section class="reveal">
+				<h2 style="margin:0 0 1rem 0; color: var(--neon);">22 señales de excelencia</h2>
+				<div class="grid22" id="grid22"></div>
+			</section>
+		</main>
+
+		<footer class="container">
+			<div class="copy">© <span id="year"></span> <strong>ANDRES FELIPE MARTINEZ TABORDA</strong> · Hecho con <span class="ok">22</span> líneas de cariño.</div>
+		</footer>
+
+		<script>
+			// Utilidades rápidas
+			const $ = (sel, el = document) => el.querySelector(sel);
+			const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
+
+			// Matrix Rain en el HERO
+			(function matrix() {
+				const canvas = document.getElementById('matrix');
+				const ctx = canvas.getContext('2d');
+				let w, h, fontSize, columns, drops, running = true;
+				const glyphs = ('A N D R E S F E L I P E M A R T I N E Z T A B O R D A 2 2 2 2 2').split(/\s+/);
+
+				function resize() {
+					const rect = canvas.parentElement.getBoundingClientRect();
+					w = canvas.width = Math.floor(rect.width * window.devicePixelRatio);
+					h = canvas.height = Math.floor(rect.height * window.devicePixelRatio);
+					ctx.setTransform(1, 0, 0, 1, 0, 0);
+					ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+					fontSize = Math.max(14, Math.min(24, Math.floor(rect.width / 60)));
+					columns = Math.ceil(rect.width / fontSize);
+					drops = new Array(columns).fill(0).map(() => Math.floor(Math.random() * -50));
+					ctx.font = fontSize + 'px Consolas, monospace';
+				}
+
+				let last = 0; const interval = 1000 / 30; // ~30fps para suavidad/eficiencia
+				function draw(ts) {
+					if (!running) return;
+					requestAnimationFrame(draw);
+					if (ts - last < interval) return; last = ts;
+					const rect = canvas.parentElement.getBoundingClientRect();
+					ctx.fillStyle = 'rgba(11,18,11,0.16)';
+					ctx.fillRect(0, 0, rect.width, rect.height);
+					ctx.fillStyle = '#22ff22';
+					for (let i = 0; i < drops.length; i++) {
+						const x = i * fontSize;
+						const y = drops[i] * fontSize;
+						const ch = glyphs[(Math.random() * glyphs.length) | 0];
+						ctx.fillText(ch, x, y);
+						if (y > rect.height && Math.random() > 0.975) drops[i] = 0;
+						drops[i]++;
+					}
+				}
+
+				resize();
+				requestAnimationFrame(draw);
+				window.addEventListener('resize', resize);
+				document.getElementById('btnPauseMatrix').addEventListener('click', () => {
+					running = !running;
+					if (running) { last = 0; requestAnimationFrame(draw); }
+					document.getElementById('btnPauseMatrix').textContent = running ? 'Pausar Matrix' : 'Reanudar Matrix';
+				});
+			})();
+
+			// Typewriter suave para el subtítulo
+			(function typewriter(){
+				const el = document.getElementById('typewrite');
+				const base = el.dataset.text || el.textContent.trim();
+				let i = 0, dir = 1;
+				function tick(){
+					el.textContent = base.slice(0, i) + (i % 2 === 0 ? ' ▮' : ' ▯');
+					i += dir;
+					if (i > base.length + 2) dir = -1;
+					if (i < 1) dir = 1;
+					setTimeout(tick, 66);
+				}
+				tick();
+			})();
+
+			// Generar 22 tiles con 22 referencias
+			(function tiles22(){
+				const grid = document.getElementById('grid22');
+				const items = [
+					'22 commits antes del café', '22 ms de latencia', '22 rutas seguras', '22 pruebas verdes',
+					'22% CPU feliz', '22 deploys limpios', '22 algoritmos', '22 puertos abiertos',
+					'22 módulos propios', '22 keys seguras', '22 ramas ordenadas', '22 endpoints REST',
+					'22 contenedores', '22 scripts útiles', '22 backups', '22 dashboards',
+					'22 microservicios', '22 sprints', '22 features', '22 automations', '22 monitores', '22 sonrisas'
+				];
+				for (let i = 0; i < 22; i++) {
+					const d = document.createElement('div');
+					d.className = 'tile22 reveal';
+					d.innerHTML = `<div class="big">22</div><div class="mini">${items[i % items.length]}</div>`;
+					grid.appendChild(d);
+				}
+			})();
+
+			// Reveal en scroll
+			(function reveal(){
+				const io = new IntersectionObserver((entries) => {
+					entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+				}, { threshold: 0.08 });
+				$$('.reveal').forEach(n => io.observe(n));
+			})();
+
+			// Cargar foto de ANDRES (hero) con FileReader + persistencia localStorage
+			(function photo(){
+				const hero = document.getElementById('heroImage');
+				const input = document.getElementById('photoInput');
+				const btn = document.getElementById('btnSetPhoto');
+				const KEY = 'andres-22-hero';
+
+				function apply(url){
+					hero.style.setProperty('--hero-image', `url('${url}')`);
+					hero.classList.add('has-image');
+				}
+				try {
+					const saved = localStorage.getItem(KEY);
+					if (saved) apply(saved);
+				} catch {}
+
+				btn.addEventListener('click', () => input.click());
+				hero.addEventListener('click', () => input.click());
+				input.addEventListener('change', (e) => {
+					const file = e.target.files && e.target.files[0]; if (!file) return;
+					const reader = new FileReader();
+					reader.onload = () => { const url = reader.result; apply(url); try { localStorage.setItem(KEY, url); } catch {} };
+					reader.readAsDataURL(file);
+				});
+				// Arrastrar y soltar
+				;['dragover','drop','dragleave'].forEach(ev => hero.addEventListener(ev, (e)=>{ e.preventDefault(); }));
+				hero.addEventListener('drop', (e)=>{
+					const file = e.dataTransfer.files && e.dataTransfer.files[0]; if (!file) return;
+					const reader = new FileReader(); reader.onload = () => { const url = reader.result; apply(url); try { localStorage.setItem(KEY, url); } catch {} }; reader.readAsDataURL(file);
+				});
+			})();
+
+			// Alternar contraste/tema (ligero ajuste de brillo)
+			(function theme(){
+				const btn = document.getElementById('btnTheme');
+				let high = false;
+				btn.addEventListener('click', ()=>{
+					high = !high;
+					document.body.style.filter = high ? 'contrast(1.1) brightness(1.06)' : '';
+					btn.textContent = high ? 'Contraste 22 ✓' : 'Contraste 22';
+				});
+			})();
+
+			// Año en footer
+			document.getElementById('year').textContent = new Date().getFullYear();
+		</script>
+	</body>
+	</html>
